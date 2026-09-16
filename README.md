@@ -6,6 +6,13 @@ Tiny macOS menu bar utility. One circle, two rings:
 > local `~/.codex/auth.json` and uses the same private usage endpoint as the
 > Codex CLI — if OpenAI changes that endpoint, this breaks until updated.
 
+<p>
+  <img src="screenshot-menubar.png" alt="Menu bar: weekly%W, 5-hour ring, 5h%" height="44" />
+</p>
+<p>
+  <img src="screenshot-popover.png" alt="Popover: double rings, limits, resets" width="300" />
+</p>
+
 - **Outer ring = weekly limit** (royal blue, easy on eyes), **inner ring = 5-hour** (Watch green). Fixed hues like the Watch — arc length + % + chimes tell the story.
 - **Menu bar:** `weekly%W ⭕ 5h%` — both numbers stay; between them a single green 5-hour ring. Hover/click for the popover with double rings, resets.
 - **Follows Codex:** open this app while Codex runs and the icon appears; quit Codex and it quits itself entirely. Nothing starts at login — when it's off, it's fully off (0 MB, 0 CPU).
