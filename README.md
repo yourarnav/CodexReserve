@@ -7,9 +7,6 @@ Tiny macOS menu bar utility. One circle, two rings:
 > Codex CLI — if OpenAI changes that endpoint, this breaks until updated.
 
 <p align="center">
-  <img src="screenshot-menubar-v2.png" alt="Menu bar: weekly%W, 5-hour ring, 5h%" height="44" />
-</p>
-<p align="center">
   <img src="screenshot-popover-v2.png" alt="Popover: double rings, limits, resets" width="300" />
 </p>
 
