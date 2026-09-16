@@ -36,10 +36,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Read synchronously from the hot mouse-move path (stale reads harmless).
     nonisolated(unsafe) private var tearingDown = false
 
-    /// The app whose presence drives us: Codex lives inside ChatGPT.app,
-    /// whose bundle ID is com.openai.codex (display name "ChatGPT").
-    private let targetBundleIDs: Set<String> = ["com.openai.codex"]
-
     func applicationDidFinishLaunching(_ notification: Notification) {
         // model.start() happens via updateVisibility() below (only if Codex runs).
 
@@ -195,10 +191,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     // MARK: - Follow Codex (show while it runs, quit when it quits)
+    // Matching rules live in TargetMatch.swift (unit-tested).
 
     private func targetRunning() -> Bool {
         NSWorkspace.shared.runningApplications.contains {
-            $0.bundleIdentifier.map(targetBundleIDs.contains) ?? false
+            TargetMatch.isTarget(bundleID: $0.bundleIdentifier,
+                                 executableName: $0.executableURL?.lastPathComponent)
         }
     }
 
