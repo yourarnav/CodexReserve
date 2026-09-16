@@ -6,10 +6,10 @@ Tiny macOS menu bar utility. One circle, two rings:
 > local `~/.codex/auth.json` and uses the same private usage endpoint as the
 > Codex CLI — if OpenAI changes that endpoint, this breaks until updated.
 
-<p>
+<p align="center">
   <img src="screenshot-menubar.png" alt="Menu bar: weekly%W, 5-hour ring, 5h%" height="44" />
 </p>
-<p>
+<p align="center">
   <img src="screenshot-popover.png" alt="Popover: double rings, limits, resets" width="300" />
 </p>
 
