@@ -1,8 +1,5 @@
 # CodexBar
 
-Two rings in your menu bar.
-
-**5-hour limit. Weekly limit. That’s it.**
 
 <p align="center">
   <img src="screenshot-popover-v2.png" alt="CodexBar showing Codex usage limits" width="300" />
