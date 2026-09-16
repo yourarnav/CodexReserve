@@ -20,8 +20,13 @@ Prefer the manual way? Grab `CodexReserve.dmg` from
 open it, drag CodexReserve into Applications. The code is all on this page,
 go read it first if you like.
 
-First launch: right-click CodexReserve, choose Open. Your Mac warns about
-unknown developers because this is free and self signed, not notarized.
+First launch: your Mac will call it damaged because this is free and
+self signed, not notarized. Clear the flag once, then open it normally:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/CodexReserve.app
+```
+
 That warning is the price of free.
 
 ## It does one job
