@@ -1,28 +1,50 @@
 # CodexBar
 
-Two rings. Your menu bar. Done.
+Your Codex limits. In the menu bar.
 
 <p align="center">
-  <img src="screenshot-popover-v2.png" alt="Popover: double rings, limits, resets" width="300" />
+  <img src="screenshot-popover-v2.png" alt="CodexBar" width="300" />
 </p>
 
-Everyone else is building the Bloomberg Terminal for AI tokens. One app tracking Anthropic and OpenAI and local llamas and OpenRouter and your token history and your token future and probably your token horoscope. Settings pages with forty toggles. A second app living inside the first app.
+I kept checking how much Codex I had left.
 
-CodexBar answers exactly one question: can I keep coding right now?
+So I put it in the menu bar.
 
-Blue ring: your week. Green ring: your next five hours. A chime when either gets thin. Then it quits with Codex and vanishes, because software should know when to leave the room.
+That's CodexBar.
 
-## No, it does not do that other thing
+Your **5-hour limit** and your **weekly limit**, always there when Codex is running. Hover to see the details. It refreshes itself. A quiet chime lets you know when you're getting low.
 
-No multi provider dashboard. No token historian. No spend charts. No burn down prophecy. No widgets, no CLI, no Raycast extension, no iCloud sync, no confetti. If you need confetti when your quota resets, this is not your app, and honestly, examine your life.
+Nothing else.
 
-## Yes, it is native
+## Built for this
 
-Pure Swift. SwiftUI and AppKit, zero dependencies, 17 MB of RAM, roughly zero CPU. No Electron. No web view in a trench coat. It reads the auth Codex already put on your Mac, asks OpenAI how much you have left once a minute, and minds its own business otherwise.
+CodexBar isn't trying to become an AI dashboard.
 
-## Run it
+It doesn't need every provider, every model, token history, spend analytics, charts, forecasts, accounts, sync, or a settings page for configuring the settings page.
 
-macOS 14 or later, Xcode 26 or later, Codex signed in once.
+Those are real products. This is a different thing.
+
+I wanted to know how much Codex I had left without going anywhere to find out.
+
+Now I can.
+
+## Native Mac app
+
+Written in Swift.
+
+**SwiftUI + AppKit. Zero dependencies.**
+
+No Electron. No web view. No local server. No Dock icon.
+
+It uses the Codex authentication already on your Mac, checks your usage once a minute, and otherwise stays out of the way.
+
+Quit Codex and CodexBar quits with it.
+
+It knows when its job is done.
+
+## Install
+
+Requires macOS 14 or later and Codex signed in at least once. Building from source needs Xcode 26 or later. Command Line Tools are enough.
 
 ```bash
 git clone https://github.com/yourarnav/CodexBar.git
@@ -30,6 +52,26 @@ cd CodexBar
 ./install.sh
 ```
 
-Open Codex, open CodexBar from Launchpad. Quit Codex and it quits with it. Nothing starts at login. It will never ask for your attention except the two times per cycle you actually want it to.
+Open Codex. Open CodexBar.
 
-Unofficial, not affiliated with OpenAI. If they move the endpoint, it breaks until someone moves it back. MIT licensed, do whatever you want with it.
+That's the setup.
+
+## Why only Codex?
+
+Because that's what I wanted.
+
+There isn't a roadmap to turn this into everything.
+
+If I wanted a dashboard, I would have built a dashboard.
+
+I wanted a meter.
+
+So I built a good one.
+
+---
+
+Free and open source.
+
+Unofficial. Not affiliated with OpenAI.
+
+MIT.
