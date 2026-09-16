@@ -24,7 +24,7 @@ enum UsageService {
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
         let tokens = json["tokens"] as? [String: Any] ?? [:]
         guard let token = tokens["access_token"] as? String, !token.isEmpty else {
-            throw NSError(domain: "CodexBar", code: 1,
+            throw NSError(domain: "CodexReserve", code: 1,
                           userInfo: [NSLocalizedDescriptionKey: "No access token in ~/.codex/auth.json. Open Codex once and sign in."])
         }
         let accountID = (tokens["account_id"] as? String) ?? ""
@@ -52,24 +52,24 @@ enum UsageService {
                 case 200:
                     return try UsageSnapshot.fromAPI(data)
                 case 401:
-                    throw NSError(domain: "CodexBar", code: 401,
+                    throw NSError(domain: "CodexReserve", code: 401,
                                   userInfo: [NSLocalizedDescriptionKey: "Session expired — open Codex to sign in again."])
                 case 403:
-                    lastError = NSError(domain: "CodexBar", code: 403,
+                    lastError = NSError(domain: "CodexReserve", code: 403,
                                         userInfo: [NSLocalizedDescriptionKey: "Usage service busy (403). Retrying…"])
                     continue // transient, retry
                 default:
-                    throw NSError(domain: "CodexBar", code: http.statusCode,
+                    throw NSError(domain: "CodexReserve", code: http.statusCode,
                                   userInfo: [NSLocalizedDescriptionKey: "Unexpected response (\(http.statusCode))."])
                 }
-            } catch let e as NSError where e.domain == "CodexBar" && (e.code == 401 || e.code > 404) {
+            } catch let e as NSError where e.domain == "CodexReserve" && (e.code == 401 || e.code > 404) {
                 throw e
             } catch {
                 lastError = error
                 continue
             }
         }
-        throw lastError ?? NSError(domain: "CodexBar", code: -1,
+        throw lastError ?? NSError(domain: "CodexReserve", code: -1,
                                    userInfo: [NSLocalizedDescriptionKey: "Could not reach Codex usage."])
     }
 }

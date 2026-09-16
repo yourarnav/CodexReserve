@@ -1,20 +1,20 @@
-# CodexBar
+# CodexReserve
 
 
 <p align="center">
-  <img src="docs/screenshot-popover-v2.png" alt="CodexBar showing Codex usage limits" width="300" />
+  <img src="docs/screenshot-popover-v2.png" alt="CodexReserve showing Codex usage limits" width="300" />
 </p>
 
 Look up. Know if you can keep coding. Continue with your life.
 
 ## Get it
 
-No building needed. Grab `CodexBar.dmg` from
-[Releases](https://github.com/yourarnav/CodexBar/releases),
-open it, drag CodexBar into Applications. The code is all on this page,
+No building needed. Grab `CodexReserve.dmg` from
+[Releases](https://github.com/yourarnav/CodexReserve/releases),
+open it, drag CodexReserve into Applications. The code is all on this page,
 go read it first if you like.
 
-First launch: right-click CodexBar, choose Open. Your Mac warns about
+First launch: right-click CodexReserve, choose Open. Your Mac warns about
 unknown developers because this is free and self signed, not notarized.
 That warning is the price of free.
 
@@ -26,7 +26,7 @@ The **blue ring** is your weekly limit.
 
 Hover for the numbers and reset times.
 
-CodexBar refreshes quietly in the background and gives you a chime as your limits run down.
+CodexReserve refreshes quietly in the background and gives you a chime as your limits run down.
 
 No dashboard to maintain.
 No account to create.
@@ -34,7 +34,7 @@ No provider to configure.
 
 ## Built like a Mac app
 
-CodexBar is native Swift.
+CodexReserve is native Swift.
 
 **SwiftUI + AppKit. Zero dependencies.**
 
@@ -45,13 +45,13 @@ No background process reconsidering its purpose six hours after you stopped codi
 
 ## Deliberately not everything
 
-CodexBar does not track Claude, Gemini, OpenRouter, your local llama farm, API spend, historical token consumption, projected token consumption, or the lunar phase under which those tokens were consumed.
+CodexReserve does not track Claude, Gemini, OpenRouter, your local llama farm, API spend, historical token consumption, projected token consumption, or the lunar phase under which those tokens were consumed.
 
 There are excellent tools for people who want an AI usage command center.
 
 This isn't one.
 
-CodexBar answers a smaller question:
+CodexReserve answers a smaller question:
 
 > **Can I keep using Codex?**
 
@@ -62,12 +62,12 @@ That question deserved a two-ring answer, not another SaaS dashboard.
 Requires macOS 14 or later and Codex signed in at least once. Building from source needs Xcode 26 or later.
 
 ```bash
-git clone https://github.com/yourarnav/CodexBar.git
-cd CodexBar
+git clone https://github.com/yourarnav/CodexReserve.git
+cd CodexReserve
 ./install.sh
 ```
 
-Then open **CodexBar** while Codex is running.
+Then open **CodexReserve** while Codex is running.
 
 That's the onboarding.
 
@@ -75,6 +75,6 @@ That's the onboarding.
 
 Unofficial. Not affiliated with OpenAI.
 
-If OpenAI changes the usage endpoint, CodexBar may break until it catches up.
+If OpenAI changes the usage endpoint, CodexReserve may break until it catches up.
 
 MIT licensed.

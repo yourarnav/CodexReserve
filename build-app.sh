@@ -1,10 +1,10 @@
 #!/bin/bash
-# Build CodexBar.app (menu-bar-only, no Dock icon via LSUIElement)
+# Build CodexReserve.app (menu-bar-only, no Dock icon via LSUIElement)
 set -euo pipefail
 cd "$(dirname "$0")"
 
-APP="CodexBar.app"
-IDENTIFIER="com.codexbar.app"
+APP="CodexReserve.app"
+IDENTIFIER="com.codexreserve.app"
 
 echo "→ swift build -c release"
 swift build -c release
@@ -13,8 +13,8 @@ echo "→ bundling $APP"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
-cp ".build/release/CodexBar" "$APP/Contents/MacOS/CodexBar"
-chmod +x "$APP/Contents/MacOS/CodexBar"
+cp ".build/release/CodexReserve" "$APP/Contents/MacOS/CodexReserve"
+chmod +x "$APP/Contents/MacOS/CodexReserve"
 
 # App icon (Apple-esque squircle + double ring). Regenerate with ./icon/make-icon.sh
 if [ ! -f Resources/AppIcon.icns ]; then
@@ -27,10 +27,10 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleExecutable</key><string>CodexBar</string>
+    <key>CFBundleExecutable</key><string>CodexReserve</string>
     <key>CFBundleIdentifier</key><string>$IDENTIFIER</string>
-    <key>CFBundleName</key><string>CodexBar</string>
-    <key>CFBundleDisplayName</key><string>CodexBar</string>
+    <key>CFBundleName</key><string>CodexReserve</string>
+    <key>CFBundleDisplayName</key><string>CodexReserve</string>
     <key>CFBundleVersion</key><string>1.0</string>
     <key>CFBundleShortVersionString</key><string>1.0</string>
     <key>CFBundlePackageType</key><string>APPL</string>

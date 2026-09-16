@@ -1,9 +1,9 @@
 #!/bin/bash
-# Render CodexBar's Apple-esque icon and build Resources/AppIcon.icns
+# Render CodexReserve's Apple-esque icon and build Resources/AppIcon.icns
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-WORK="/tmp/CodexBarIcon"
+WORK="/tmp/CodexReserveIcon"
 SET="$WORK/AppIcon.iconset"
 mkdir -p "$WORK" "$SET" Resources
 

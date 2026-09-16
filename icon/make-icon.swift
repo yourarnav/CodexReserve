@@ -1,11 +1,11 @@
 import AppKit
 
-// CodexBar app icon: dark Apple-esque squircle, outer royal-blue weekly ring,
+// CodexReserve app icon: dark Apple-esque squircle, outer royal-blue weekly ring,
 // inner green 5-hour ring. Rendered at 1024; downscaled by make-icon.sh.
-// Usage: swift icon/make-icon.swift /tmp/CodexBarIcon/icon_1024.png
+// Usage: swift icon/make-icon.swift /tmp/CodexReserveIcon/icon_1024.png
 
 let size: CGFloat = 1024
-let outPath = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "/tmp/CodexBarIcon/icon_1024.png"
+let outPath = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "/tmp/CodexReserveIcon/icon_1024.png"
 
 let img = NSImage(size: NSSize(width: size, height: size))
 img.lockFocus()
