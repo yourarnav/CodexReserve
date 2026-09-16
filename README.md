@@ -31,9 +31,9 @@ That warning is the price of free.
 
 ## It does one job
 
-The **green ring** is your 5-hour Codex limit.
+The **<span style="color:#1e9e4a">green ring</span>** is your 5-hour Codex limit.
 
-The **blue ring** is your weekly limit.
+The **<span style="color:#4169e1">blue ring</span>** is your weekly limit.
 
 Hover for the numbers and reset times.
 

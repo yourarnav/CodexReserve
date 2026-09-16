@@ -1,0 +1,180 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+  color: #1d1d1f;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+}
+
+/* Slim sticky nav, frosted */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(251, 251, 253, 0.8);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.nav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1d1d1f;
+  text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 24px; align-items: center; }
+
+.nav-links a {
+  font-size: 14px;
+  color: #1d1d1f;
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+.nav-links a.pill {
+  background: #0071e3;
+  color: #fff;
+  font-size: 13px;
+  padding: 6px 16px;
+  border-radius: 980px;
+  opacity: 1;
+}
+
+/* Hero: giant type, huge air */
+.hero {
+  padding: 110px 24px 90px;
+  background: #fbfbfd;
+}
+
+.hero h1 {
+  font-size: 64px;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.hero .sub {
+  font-size: 24px;
+  line-height: 1.4;
+  color: #6e6e73;
+  margin: 20px 0 0;
+}
+
+.hero .sub .blue { color: #4169e1; font-weight: 600; }
+.hero .sub .green { color: #1e9e4a; font-weight: 600; }
+
+.cta {
+  margin-top: 32px;
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  display: inline-block;
+  background: #0071e3;
+  color: #fff;
+  font-size: 17px;
+  padding: 12px 30px;
+  border-radius: 980px;
+  text-decoration: none;
+}
+
+.more {
+  color: #0071e3;
+  font-size: 17px;
+  text-decoration: none;
+}
+
+.more:hover, .nav-links a:hover { text-decoration: underline; }
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.brew {
+  display: inline-block;
+  margin-top: 24px;
+  font-size: 14px;
+  color: #6e6e73;
+  background: #f5f5f7;
+  padding: 10px 18px;
+  border-radius: 10px;
+}
+
+.hero-shot {
+  display: block;
+  margin: 64px auto 0;
+  max-width: 100%;
+  height: auto;
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.14);
+}
+
+/* Sections: alternate white / Apple gray */
+section {
+  padding: 110px 24px;
+}
+
+section.band { background: #f5f5f7; }
+
+section h2 {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+section p {
+  font-size: 21px;
+  line-height: 1.5;
+  color: #6e6e73;
+  margin: 16px 0 0;
+}
+
+/* Spec strip */
+.specs {
+  padding: 40px 24px;
+  display: flex;
+  gap: 16px 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+  border-top: 1px solid #e8e8ed;
+}
+
+.specs span {
+  font-size: 14px;
+  color: #6e6e73;
+}
+
+footer {
+  padding: 24px;
+  font-size: 13px;
+  color: #6e6e73;
+  border-top: 1px solid #e8e8ed;
+}
+
+footer a { color: #424245; text-decoration: none; }
+footer .love { margin-top: 6px; }
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 42px; }
+  section h2 { font-size: 34px; }
+  section { padding: 72px 24px; }
+}
