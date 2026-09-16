@@ -3,5 +3,5 @@
 *.o
 *.dmg
 # Built app bundle (rebuild with ./build-app.sh) + macOS noise
-CodexBar.app/
+CodexReserve.app/
 .DS_Store

@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "CodexBar",
+    name: "CodexReserve",
     platforms: [.macOS(.v14)],
     targets: [
         .executableTarget(
-            name: "CodexBar",
-            path: "Sources/CodexBar"
+            name: "CodexReserve",
+            path: "Sources/CodexReserve"
         )
     ]
 )

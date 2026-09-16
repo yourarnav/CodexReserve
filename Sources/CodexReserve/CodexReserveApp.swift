@@ -3,13 +3,13 @@ import Combine
 import SwiftUI
 import os
 
-private let hoverLog = Logger(subsystem: "com.codexbar.app", category: "hover")
+private let hoverLog = Logger(subsystem: "com.codexreserve.app", category: "hover")
 
 /// Classic AppKit status-item hosting. We deliberately do NOT use SwiftUI's
 /// MenuBarExtra here: the process ran fine but the extra never appeared in
 /// the menu bar, so we drive NSStatusBar directly — the path that always shows.
 @main
-struct CodexBarMain {
+struct CodexReserveMain {
     @MainActor
     static func main() {
         let app = NSApplication.shared
@@ -92,7 +92,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let mainMenu = NSMenu()
         let appMenuItem = NSMenuItem()
         let appMenu = NSMenu()
-        appMenu.addItem(NSMenuItem(title: "Quit CodexBar",
+        appMenu.addItem(NSMenuItem(title: "Quit CodexReserve",
                                    action: #selector(NSApplication.terminate(_:)),
                                    keyEquivalent: "q"))
         appMenuItem.submenu = appMenu
@@ -210,7 +210,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             tearingDown = true
             model.stop()
             if popover.isShown { popover.performClose(nil) }
-            hoverLog.info("codex quit — quitting CodexBar")
+            hoverLog.info("codex quit — quitting CodexReserve")
             NSApplication.shared.terminate(nil)
             return
         }

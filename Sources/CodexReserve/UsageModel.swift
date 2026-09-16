@@ -1,7 +1,7 @@
 import SwiftUI
 import os
 
-private let log = Logger(subsystem: "com.codexbar.app", category: "usage")
+private let log = Logger(subsystem: "com.codexreserve.app", category: "usage")
 
 @MainActor
 final class UsageModel: ObservableObject {
