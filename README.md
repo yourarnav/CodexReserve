@@ -9,7 +9,13 @@ Look up. Know if you can keep coding. Continue with your life.
 
 ## Get it
 
-No building needed. Grab `CodexReserve.dmg` from
+One command, no building:
+
+```bash
+brew install --cask yourarnav/tap/codexreserve
+```
+
+Prefer the manual way? Grab `CodexReserve.dmg` from
 [Releases](https://github.com/yourarnav/CodexReserve/releases),
 open it, drag CodexReserve into Applications. The code is all on this page,
 go read it first if you like.
