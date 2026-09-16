@@ -1,6 +1,7 @@
 .build/
 .swiftpm/
 *.o
+*.dmg
 # Built app bundle (rebuild with ./build-app.sh) + macOS noise
 CodexBar.app/
 .DS_Store

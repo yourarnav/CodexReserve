@@ -7,6 +7,17 @@
 
 Look up. Know if you can keep coding. Continue with your life.
 
+## Get it
+
+No building needed. Grab `CodexBar.dmg` from
+[Releases](https://github.com/yourarnav/CodexBar/releases),
+open it, drag CodexBar into Applications. The code is all on this page,
+go read it first if you like.
+
+First launch: right-click CodexBar, choose Open. Your Mac warns about
+unknown developers because this is free and self signed, not notarized.
+That warning is the price of free.
+
 ## It does one job
 
 The **green ring** is your 5-hour Codex limit.
