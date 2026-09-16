@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="screenshot-popover-v2.png" alt="CodexBar showing Codex usage limits" width="300" />
+  <img src="docs/screenshot-popover-v2.png" alt="CodexBar showing Codex usage limits" width="300" />
 </p>
 
 Look up. Know if you can keep coding. Continue with your life.
