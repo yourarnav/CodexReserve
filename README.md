@@ -86,6 +86,9 @@ Then open **CodexReserve** while Codex is running.
 
 That's the onboarding.
 
+Don't see the ring? macOS hides new menu bar icons sometimes. Open System
+Settings, go to Menu Bar, find CodexReserve, switch it on.
+
 ---
 
 Unofficial. Not affiliated with OpenAI.

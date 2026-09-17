@@ -200,18 +200,35 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    /// Set once Codex has been seen in this run. Distinguishes "launched
+    /// with no Codex" (explain, then quit) from "Codex quit on us" (go quietly).
+    private var didRunWithCodex = false
+
     private func updateVisibility() {
         let running = targetRunning()
         if !running {
-            // Codex quit (and we only run while Codex runs):
-            // tear ourselves down entirely.
+            // We only run while Codex runs: tear ourselves down entirely.
             tearingDown = true
             model.stop()
             if popover.isShown { popover.performClose(nil) }
-            hoverLog.info("codex quit — quitting CodexReserve")
+            if didRunWithCodex {
+                hoverLog.info("codex quit — quitting CodexReserve")
+            } else {
+                // Launched with no Codex around: say so instead of
+                // vanishing silently (which looks broken on a stranger's Mac).
+                let alert = NSAlert()
+                alert.messageText = "Codex isn't running"
+                alert.informativeText = "Open Codex first, then open CodexReserve."
+                alert.alertStyle = .informational
+                alert.addButton(withTitle: "OK")
+                NSApplication.shared.activate()
+                alert.runModal()
+                hoverLog.info("launched without Codex — explained and quitting")
+            }
             NSApplication.shared.terminate(nil)
             return
         }
+        didRunWithCodex = true
         // First sighting of Codex in this run: kick off polling if needed.
         // Codex windows move slowly; 60s keeps the ring "continuously" fresh
         // without hammering the backend.
