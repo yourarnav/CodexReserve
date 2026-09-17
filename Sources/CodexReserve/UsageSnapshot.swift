@@ -10,6 +10,12 @@ struct UsageSnapshot: Equatable {
     var updatedAt: Date = Date()
     var error: String?
 
+    /// Structural presence of windows (independent of whether metrics parsed
+    /// successfully). A window with a missing used_percent still counts as
+    /// present, so it never triggers solo mode by accident.
+    var hasFiveHourWindow: Bool = false
+    var hasWeeklyWindow: Bool = false
+
     /// Binding limit — Codex blocks when EITHER window is exhausted.
     var effectiveRemaining: Double? {
         switch (fiveHourRemaining, weeklyRemaining) {
@@ -20,10 +26,9 @@ struct UsageSnapshot: Equatable {
         }
     }
 
-    /// Plan shapes differ (e.g. Pro has no 5-hour window). UI shows a solo
-    /// ring for whichever window actually exists, instead of hardcoding plans.
-    var isWeeklyOnly: Bool { fiveHourRemaining == nil && weeklyRemaining != nil }
-    var isFiveHourOnly: Bool { weeklyRemaining == nil && fiveHourRemaining != nil }
+    /// Solo mode flags based on actual window presence.
+    var isWeeklyOnly: Bool { !hasFiveHourWindow && hasWeeklyWindow }
+    var isFiveHourOnly: Bool { hasFiveHourWindow && !hasWeeklyWindow }
 
     static func fromAPI(_ data: Data) throws -> UsageSnapshot {
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
@@ -56,10 +61,12 @@ struct UsageSnapshot: Equatable {
             }()
 
             if let w = fiveWindow {
+                snap.hasFiveHourWindow = true
                 snap.fiveHourRemaining = remaining(from: w)
                 snap.fiveHourResetAt = resetDate(from: w)
             }
             if let w = weeklyWindow {
+                snap.hasWeeklyWindow = true
                 snap.weeklyRemaining = remaining(from: w)
                 snap.weeklyResetAt = resetDate(from: w)
             }
@@ -69,22 +76,19 @@ struct UsageSnapshot: Equatable {
     }
 
     private static func remaining(from window: [String: Any]) -> Double? {
-        guard let used = window["used_percent"] as? Double else { return nil }
+        guard let used = (window["used_percent"] as? NSNumber)?.doubleValue else { return nil }
         return max(0, min(100, 100 - used))
     }
 
     /// True when the window's duration matches `hours` (±25%).
     private static func isHours(_ window: [String: Any], hours: Double) -> Bool {
-        guard let secs = window["limit_window_seconds"] as? Double else { return false }
+        guard let secs = (window["limit_window_seconds"] as? NSNumber)?.doubleValue else { return false }
         return abs(secs - hours * 3600) / (hours * 3600) <= 0.25
     }
 
     private static func resetDate(from window: [String: Any]) -> Date? {
-        if let ts = window["reset_at"] as? Double {
+        if let ts = (window["reset_at"] as? NSNumber)?.doubleValue {
             return Date(timeIntervalSince1970: ts)
-        }
-        if let ts = window["reset_at"] as? Int {
-            return Date(timeIntervalSince1970: Double(ts))
         }
         return nil
     }

@@ -32,6 +32,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var closeTimer: Timer?
     private var mouseMonitor: Any?
     private var keyMonitor: Any?
+    /// Guards the startup fetch: workspace notifications fire for every app
+    /// launch/quit system-wide, so without this two fetches could run
+    /// concurrently and double-fire sounds.
+    private var isStartingFetch = false
     /// Set when Codex quits: stop all background work for the teardown.
     /// Read synchronously from the hot mouse-move path (stale reads harmless).
     nonisolated(unsafe) private var tearingDown = false
