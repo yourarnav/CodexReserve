@@ -39,6 +39,9 @@ The **<span style="color:#1e9e4a">green ring</span>** is your 5-hour Codex limit
 
 The **<span style="color:#4169e1">blue ring</span>** is your weekly limit.
 
+Pro accounts with no 5-hour window show the weekly ring solo. The app
+shows whatever windows your account actually has.
+
 Hover for the numbers and reset times.
 
 CodexReserve refreshes quietly in the background and gives you a chime as your limits run down.

@@ -12,6 +12,7 @@ enum RingIcon {
     static let pad: CGFloat = 1
 
     static let fiveHourGreen = NSColor.systemGreen
+    static let weeklyBlue = NSColor(srgbRed: 65.0 / 255, green: 105.0 / 255, blue: 225.0 / 255, alpha: 1)
 
     /// Left label: weekly number + small "W" so it's identifiable at a glance.
     static func leftLabel(weekly: Double?) -> NSAttributedString {
@@ -31,11 +32,27 @@ enum RingIcon {
     }
 
     static func make(weekly: Double?, fiveHour: Double?) -> NSImage {
-        let left = leftLabel(weekly: weekly)
-        let right = rightLabel(fiveHour: fiveHour)
+        if fiveHour == nil, weekly != nil {
+            // Solo mode (e.g. Pro accounts with no 5-hour window):
+            // weekly number + single blue ring, nothing else.
+            return strip(left: leftLabel(weekly: weekly),
+                         fraction: weekly.map { $0 / 100 },
+                         color: weeklyBlue,
+                         right: nil)
+        }
+        return strip(left: leftLabel(weekly: weekly),
+                     fraction: fiveHour.map { $0 / 100 },
+                     color: fiveHour == nil ? .tertiaryLabelColor : fiveHourGreen,
+                     right: rightLabel(fiveHour: fiveHour))
+    }
+
+    /// Composes `left [rings] right`. Nil right = solo mode (no trailing dash).
+    private static func strip(left: NSAttributedString, fraction: Double?,
+                              color: NSColor, right: NSAttributedString?) -> NSImage {
         let leftSize = left.size()
-        let rightSize = right.size()
-        let width = pad + leftSize.width + gap + ringsWidth + gap + rightSize.width + pad
+        let rightSize = right?.size() ?? .zero
+        let rightBlock = right == nil ? 0 : gap + rightSize.width
+        let width = pad + leftSize.width + gap + ringsWidth + rightBlock + pad
 
         // Flipped context so NSString draws upright.
         let img = NSImage(size: NSSize(width: width, height: barHeight), flipped: true) { rect in
@@ -43,9 +60,11 @@ enum RingIcon {
             let cx = pad + leftSize.width + gap + ringsWidth / 2
             let center = NSPoint(x: cx, y: rect.height / 2)
             drawRing(center: center, radius: 8.8, lineWidth: 3.6,
-                     fraction: fiveHour.map { $0 / 100 }, color: fiveHour == nil ? .tertiaryLabelColor : fiveHourGreen)
-            let rx = pad + leftSize.width + gap + ringsWidth + gap
-            right.draw(at: NSPoint(x: rx, y: (rect.height - rightSize.height) / 2))
+                     fraction: fraction, color: color)
+            if let right {
+                let rx = pad + leftSize.width + gap + ringsWidth + gap
+                right.draw(at: NSPoint(x: rx, y: (rect.height - rightSize.height) / 2))
+            }
             return true
         }
         img.isTemplate = false // full color — never render as a faded silhouette

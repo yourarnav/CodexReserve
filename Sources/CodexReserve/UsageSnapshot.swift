@@ -20,6 +20,11 @@ struct UsageSnapshot: Equatable {
         }
     }
 
+    /// Plan shapes differ (e.g. Pro has no 5-hour window). UI shows a solo
+    /// ring for whichever window actually exists, instead of hardcoding plans.
+    var isWeeklyOnly: Bool { fiveHourRemaining == nil && weeklyRemaining != nil }
+    var isFiveHourOnly: Bool { weeklyRemaining == nil && fiveHourRemaining != nil }
+
     static func fromAPI(_ data: Data) throws -> UsageSnapshot {
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
         var snap = UsageSnapshot()
