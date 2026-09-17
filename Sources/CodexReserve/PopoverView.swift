@@ -25,7 +25,7 @@ struct PopoverView: View {
                 .help("Refresh now")
             }
 
-            DoubleRingView(weekly: s.weeklyRemaining, fiveHour: s.fiveHourRemaining, size: 156)
+            DoubleRingView(snapshot: s, size: 156)
                 .padding(.top, 4)
 
             VStack(spacing: 8) {

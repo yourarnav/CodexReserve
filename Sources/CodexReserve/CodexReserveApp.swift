@@ -45,7 +45,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem = item
-        item.button?.image = RingIcon.make(weekly: nil, fiveHour: nil)
+        item.button?.image = RingIcon.make(snapshot: UsageSnapshot())
         item.button?.imagePosition = .imageOnly // the image already contains both numbers
         item.button?.title = ""
         item.button?.appearsDisabled = false // never render faded
@@ -124,8 +124,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             .receive(on: RunLoop.main)
             .sink { [weak self] snap in
                 guard let self, let button = self.statusItem?.button else { return }
-                button.image = RingIcon.make(weekly: snap.weeklyRemaining,
-                                             fiveHour: snap.fiveHourRemaining)
+                button.image = RingIcon.make(snapshot: snap)
                 button.title = ""
                 button.toolTip = self.tooltip(for: snap)
             }
@@ -245,8 +244,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // First sighting of Codex in this run: kick off polling if needed.
         // Codex windows move slowly; 60s keeps the ring "continuously" fresh
         // without hammering the backend.
-        if !model.polling {
+        if !model.polling && !isStartingFetch {
+            isStartingFetch = true
             Task {
+                defer { self.isStartingFetch = false }
                 do {
                     let snap = try await UsageService.fetchSnapshot()
                     self.model.start(seeded: snap)

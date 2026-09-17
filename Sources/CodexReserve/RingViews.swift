@@ -56,28 +56,27 @@ struct Ring: View {
     }
 }
 
-/// Double ring: outer = weekly (royal blue), inner = 5-hour (Watch green).
-/// Solo mode when only one window exists (e.g. Pro has no 5-hour window):
-/// a single centered ring in that window's color.
+/// Outer = weekly (royal blue), inner = 5-hour (Watch green).
+/// Solo mode when only one window exists. Same rule as the menu strip:
+/// the decision lives in `isWeeklyOnly`/`isFiveHourOnly` ONLY.
 struct DoubleRingView: View {
-    var weekly: Double?   // 0...100 remaining
-    var fiveHour: Double?
+    var snapshot: UsageSnapshot
     var size: CGFloat = 120
 
     var body: some View {
         Group {
-            if fiveHour == nil, let weekly {
+            if snapshot.isWeeklyOnly, let weekly = snapshot.weeklyRemaining {
                 Ring(fraction: weekly / 100, color: .codexBlue, lineWidth: size * 0.085)
-            } else if weekly == nil, let fiveHour {
-                Ring(fraction: fiveHour / 100, color: .green, lineWidth: size * 0.085)
+            } else if snapshot.isFiveHourOnly, let five = snapshot.fiveHourRemaining {
+                Ring(fraction: five / 100, color: .green, lineWidth: size * 0.085)
             } else {
                 ZStack {
-                    Ring(fraction: (weekly ?? 0) / 100,
-                         color: weekly == nil ? .gray : .codexBlue,
+                    Ring(fraction: (snapshot.weeklyRemaining ?? 0) / 100,
+                         color: snapshot.weeklyRemaining == nil ? .gray : .codexBlue,
                          lineWidth: size * 0.085)
                         .frame(width: size, height: size)
-                    Ring(fraction: (fiveHour ?? 0) / 100,
-                         color: fiveHour == nil ? .gray : .green,
+                    Ring(fraction: (snapshot.fiveHourRemaining ?? 0) / 100,
+                         color: snapshot.fiveHourRemaining == nil ? .gray : .green,
                          lineWidth: size * 0.085)
                         .frame(width: size * 0.70, height: size * 0.70)
                 }

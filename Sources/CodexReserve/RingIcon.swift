@@ -31,23 +31,26 @@ enum RingIcon {
             attributes: [.font: numberFont, .foregroundColor: NSColor.labelColor])
     }
 
-    static func make(weekly: Double?, fiveHour: Double?) -> NSImage {
-        if fiveHour == nil, let weekly {
+    /// Single entry point: the windowing decision lives in
+    /// `isWeeklyOnly`/`isFiveHourOnly` ONLY. Nothing here may branch on
+    /// metric nil-ness, or rings and rows desync again.
+    static func make(snapshot snap: UsageSnapshot) -> NSImage {
+        if snap.isWeeklyOnly, let weekly = snap.weeklyRemaining {
             return strip(left: leftLabel(weekly: weekly),
                          fraction: weekly / 100,
                          color: weeklyBlue,
                          right: nil)
         }
-        if weekly == nil, let fiveHour {
-            return strip(left: rightLabel(fiveHour: fiveHour),
-                         fraction: fiveHour / 100,
+        if snap.isFiveHourOnly, let five = snap.fiveHourRemaining {
+            return strip(left: rightLabel(fiveHour: five),
+                         fraction: five / 100,
                          color: fiveHourGreen,
                          right: nil)
         }
-        return strip(left: leftLabel(weekly: weekly),
-                     fraction: fiveHour.map { $0 / 100 },
-                     color: fiveHour == nil ? .tertiaryLabelColor : fiveHourGreen,
-                     right: rightLabel(fiveHour: fiveHour))
+        return strip(left: leftLabel(weekly: snap.weeklyRemaining),
+                     fraction: snap.fiveHourRemaining.map { $0 / 100 },
+                     color: snap.fiveHourRemaining == nil ? .tertiaryLabelColor : fiveHourGreen,
+                     right: rightLabel(fiveHour: snap.fiveHourRemaining))
     }
 
     /// Composes `left [rings] right`. Nil right = solo mode (no trailing dash).
