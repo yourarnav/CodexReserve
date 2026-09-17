@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="CodexReserve: a tiny native macOS menu bar app that shows your 5-hour and weekly Codex limits at a glance." />
   <meta name="theme-color" content="#f6f6f4" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CodexReserve" />
+  <meta property="og:title" content="CodexReserve: know if you can keep coding" />
+  <meta property="og:description" content="Two rings in your menu bar. Codex 5-hour and weekly limits, nothing else. Native macOS app, free and open source." />
+  <meta property="og:url" content="https://codex-reserve.vercel.app/" />
+  <meta property="og:image" content="https://codex-reserve.vercel.app/assets/pop.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CodexReserve: know if you can keep coding" />
+  <meta name="twitter:description" content="Two rings in your menu bar. Codex 5-hour and weekly limits, nothing else." />
+  <meta name="twitter:image" content="https://codex-reserve.vercel.app/assets/pop.png" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"CodexReserve","operatingSystem":"macOS 14+","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0"},"author":{"@type":"Person","name":"Arnav Attri"},"url":"https://codex-reserve.vercel.app/","downloadUrl":"https://github.com/yourarnav/CodexReserve/releases","license":"https://github.com/yourarnav/CodexReserve/blob/main/LICENSE"}
+  </script>
   <title>CodexReserve: know if you can keep coding</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
@@ -156,6 +169,7 @@
             <span>$</span><code>brew install --cask yourarnav/tap/codexreserve</code><b>Copy</b>
           </button>
           <p class="terminal-note">Prefer the manual route? <a href="https://github.com/yourarnav/CodexReserve/releases" target="_blank" rel="noreferrer">Grab the latest DMG ↗</a></p>
+          <p class="terminal-note">Mac calls it damaged on first launch? It's just unsigned. Clear it once: <code>xattr -dr com.apple.quarantine /Applications/CodexReserve.app</code></p>
         </div>
       </div>
     </section>
