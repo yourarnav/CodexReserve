@@ -5,6 +5,10 @@
   <img src="docs/screenshot-popover-v2.png" alt="CodexReserve showing Codex usage limits" width="300" />
 </p>
 
+<p align="center">
+  <a href="https://codex-reserve.vercel.app/">Live preview</a>
+</p>
+
 Look up. Know if you can keep coding. Continue with your life.
 
 ## Get it
