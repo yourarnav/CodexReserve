@@ -6,8 +6,14 @@ cd "$(dirname "$0")"
 APP="CodexReserve.app"
 IDENTIFIER="com.codexreserve.app"
 
-echo "→ swift build -c release"
-swift build -c release
+echo "→ swift build -c release (universal: arm64 + x86_64)"
+swift build -c release --arch arm64
+swift build -c release --arch x86_64
+lipo -create \
+  ".build/arm64-apple-macosx/release/CodexReserve" \
+  ".build/x86_64-apple-macosx/release/CodexReserve" \
+  -output ".build/release/CodexReserve"
+lipo -info ".build/release/CodexReserve"
 
 echo "→ bundling $APP"
 rm -rf "$APP"
