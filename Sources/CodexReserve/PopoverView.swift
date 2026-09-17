@@ -29,14 +29,18 @@ struct PopoverView: View {
                 .padding(.top, 4)
 
             VStack(spacing: 8) {
-                LimitRow(dot: .green,
-                         title: "5-hour",
-                         remaining: s.fiveHourRemaining,
-                         reset: s.resetString(for: s.fiveHourResetAt))
-                LimitRow(dot: .codexBlue,
-                         title: "Weekly",
-                         remaining: s.weeklyRemaining,
-                         reset: s.resetString(for: s.weeklyResetAt))
+                if s.fiveHourRemaining != nil || !s.isWeeklyOnly {
+                    LimitRow(dot: .green,
+                             title: "5-hour",
+                             remaining: s.fiveHourRemaining,
+                             reset: s.resetString(for: s.fiveHourResetAt))
+                }
+                if s.weeklyRemaining != nil || !s.isFiveHourOnly {
+                    LimitRow(dot: .codexBlue,
+                             title: "Weekly",
+                             remaining: s.weeklyRemaining,
+                             reset: s.resetString(for: s.weeklyResetAt))
+                }
             }
 
             if let err = s.error {
