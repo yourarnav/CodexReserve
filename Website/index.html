@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="CodexReserve — a tiny native macOS menu bar app that shows your 5-hour and weekly Codex limits at a glance." />
+  <meta name="theme-color" content="#f6f6f4" />
+  <title>CodexReserve — Know if you can keep coding.</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-blue" aria-hidden="true"></div>
+  <div class="ambient ambient-green" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="CodexReserve home">
+      <span class="brand-mark" aria-hidden="true">
+        <span class="brand-ring brand-ring-blue"></span>
+        <span class="brand-ring brand-ring-green"></span>
+      </span>
+      <span>CodexReserve</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="#how">How it works</a>
+      <a href="#install">Install</a>
+      <a class="nav-github" href="https://github.com/yourarnav/CodexReserve" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero section-shell">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="pulse-dot"></span> macOS 14+ · native Swift</div>
+        <h1>Look up.<br><span>Know if you can keep coding.</span></h1>
+        <p class="hero-lede">CodexReserve puts your 5-hour and weekly Codex limits in the menu bar. No dashboard. No account. No configuration.</p>
+
+        <div class="hero-actions" id="install">
+          <button class="install-command" type="button" data-copy="brew install --cask yourarnav/tap/codexreserve" aria-label="Copy Homebrew install command">
+            <span class="terminal-prompt">$</span>
+            <code>brew install --cask yourarnav/tap/codexreserve</code>
+            <span class="copy-label">Copy</span>
+          </button>
+          <a class="secondary-link" href="https://github.com/yourarnav/CodexReserve/releases" target="_blank" rel="noreferrer">Download DMG <span>↗</span></a>
+        </div>
+
+        <div class="hero-meta" aria-label="Project details">
+          <span>SwiftUI + AppKit</span>
+          <span>Zero dependencies</span>
+          <span>MIT licensed</span>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal reveal-delay-1" aria-label="CodexReserve app preview">
+        <div class="visual-halo" aria-hidden="true"></div>
+        <div class="popover-shot image-card">
+          <img src="assets/pop.png" alt="CodexReserve popover showing blue weekly and green 5-hour usage rings" />
+        </div>
+        <div class="float-chip chip-weekly"><span class="dot dot-blue"></span> Weekly</div>
+        <div class="float-chip chip-five"><span class="dot dot-green"></span> 5-hour</div>
+      </div>
+    </section>
+
+    <section class="statement section-shell reveal" id="how">
+      <p class="section-kicker">It does one job</p>
+      <h2>Two limits. Two rings.<br>Nothing else to manage.</h2>
+      <div class="limit-grid">
+        <article class="limit-card limit-five">
+          <div class="mini-ring mini-ring-green" aria-hidden="true"></div>
+          <div>
+            <p class="limit-label">5-hour limit</p>
+            <h3>The green ring.</h3>
+            <p>See the short-window reserve you have left before Codex needs time to reset.</p>
+          </div>
+        </article>
+        <article class="limit-card limit-weekly">
+          <div class="mini-ring mini-ring-blue" aria-hidden="true"></div>
+          <div>
+            <p class="limit-label">Weekly limit</p>
+            <h3>The blue ring.</h3>
+            <p>Open the popover for your weekly reserve, remaining percentage, and reset time.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="experience section-shell reveal">
+      <div class="experience-image-wrap">
+        <img src="assets/pop.png" alt="CodexReserve popover interface" class="experience-image" loading="lazy" />
+      </div>
+      <div class="experience-copy">
+        <p class="section-kicker">Quiet until useful</p>
+        <h2>Hover for the numbers. Go back to work.</h2>
+        <p>CodexReserve refreshes quietly in the background, shows reset times when you need them, and gives you a chime as your limits run down.</p>
+        <div class="feature-lines">
+          <div><span>01</span><p><strong>At a glance.</strong> Your menu bar shows the weekly percentage, 5-hour ring, and short-window percentage.</p></div>
+          <div><span>02</span><p><strong>Useful detail on demand.</strong> Hover or open the popover to see both limits and their reset times.</p></div>
+          <div><span>03</span><p><strong>Low-noise alerts.</strong> A simple sound lets you know when your reserve crosses important thresholds.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="native section-shell" id="native">
+      <div class="native-intro reveal">
+        <p class="section-kicker">Built like a Mac app</p>
+        <h2>Native means native.</h2>
+        <p>CodexReserve is written in Swift with SwiftUI and AppKit. It is small on purpose, with no framework pile hiding behind the menu bar.</p>
+      </div>
+      <div class="native-grid reveal reveal-delay-1">
+        <article class="native-card native-card-dark">
+          <span class="card-number">01</span>
+          <h3>Zero dependencies.</h3>
+          <p>No Electron. No web view wearing an <code>.app</code> costume. No local server.</p>
+          <div class="code-pill">Swift 6</div>
+        </article>
+        <article class="native-card">
+          <span class="card-number">02</span>
+          <h3>No extra account.</h3>
+          <p>It uses the Codex sign-in already on your Mac. There is no separate provider setup to maintain.</p>
+          <div class="code-pill">Codex auth</div>
+        </article>
+        <article class="native-card">
+          <span class="card-number">03</span>
+          <h3>No usage empire.</h3>
+          <p>No historical token warehouse, spend projections, or multi-provider control room. Just the answer you came for.</p>
+          <div class="code-pill">2 rings</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="answer section-shell reveal">
+      <div class="answer-inner">
+        <div class="answer-rings" aria-hidden="true">
+          <span class="answer-ring answer-ring-blue"></span>
+          <span class="answer-ring answer-ring-green"></span>
+        </div>
+        <div>
+          <p class="section-kicker">The smaller question</p>
+          <h2>Can I keep using Codex?</h2>
+          <p>That question deserved a two-ring answer, not another SaaS dashboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="get section-shell reveal">
+      <div class="get-copy">
+        <p class="section-kicker">Get CodexReserve</p>
+        <h2>One command.<br>Then look up.</h2>
+        <p>Requires macOS 14 or later and Codex signed in at least once.</p>
+      </div>
+      <div class="install-panel">
+        <div class="terminal-top"><span></span><span></span><span></span><small>Terminal</small></div>
+        <div class="terminal-body">
+          <button class="terminal-command" type="button" data-copy="brew install --cask yourarnav/tap/codexreserve">
+            <span>$</span><code>brew install --cask yourarnav/tap/codexreserve</code><b>Copy</b>
+          </button>
+          <p class="terminal-note">Prefer the manual route? <a href="https://github.com/yourarnav/CodexReserve/releases" target="_blank" rel="noreferrer">Grab the latest DMG ↗</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer section-shell">
+    <a class="brand footer-brand" href="#top">
+      <span class="brand-mark" aria-hidden="true"><span class="brand-ring brand-ring-blue"></span><span class="brand-ring brand-ring-green"></span></span>
+      <span>CodexReserve</span>
+    </a>
+    <p>Unofficial. Not affiliated with OpenAI. If the Codex usage endpoint changes, CodexReserve may need an update.</p>
+    <div class="footer-links">
+      <a href="https://github.com/yourarnav/CodexReserve" target="_blank" rel="noreferrer">Source ↗</a>
+      <a href="https://github.com/yourarnav/CodexReserve/releases" target="_blank" rel="noreferrer">Releases ↗</a>
+      <a href="https://github.com/yourarnav/CodexReserve/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT License ↗</a>
+    </div>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite">Copied to clipboard</div>
+  <script src="script.js"></script>
+</body>
+</html>
