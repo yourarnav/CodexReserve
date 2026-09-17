@@ -32,12 +32,16 @@ enum RingIcon {
     }
 
     static func make(weekly: Double?, fiveHour: Double?) -> NSImage {
-        if fiveHour == nil, weekly != nil {
-            // Solo mode (e.g. Pro accounts with no 5-hour window):
-            // weekly number + single blue ring, nothing else.
+        if fiveHour == nil, let weekly {
             return strip(left: leftLabel(weekly: weekly),
-                         fraction: weekly.map { $0 / 100 },
+                         fraction: weekly / 100,
                          color: weeklyBlue,
+                         right: nil)
+        }
+        if weekly == nil, let fiveHour {
+            return strip(left: rightLabel(fiveHour: fiveHour),
+                         fraction: fiveHour / 100,
+                         color: fiveHourGreen,
                          right: nil)
         }
         return strip(left: leftLabel(weekly: weekly),

@@ -9,17 +9,21 @@ IDENTIFIER="com.codexreserve.app"
 echo "→ swift build -c release (universal: arm64 + x86_64)"
 swift build -c release --arch arm64
 swift build -c release --arch x86_64
+# Dedicated output dir: .build/release is an SPM symlink into one arch dir,
+# so writing lipo output there mutates its own input and breaks repeat builds
+# with duplicate-architecture errors. A separate dir stays clean.
+mkdir -p ".build/universal"
 lipo -create \
   ".build/arm64-apple-macosx/release/CodexReserve" \
   ".build/x86_64-apple-macosx/release/CodexReserve" \
-  -output ".build/release/CodexReserve"
-lipo -info ".build/release/CodexReserve"
+  -output ".build/universal/CodexReserve"
+lipo -info ".build/universal/CodexReserve"
 
 echo "→ bundling $APP"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
-cp ".build/release/CodexReserve" "$APP/Contents/MacOS/CodexReserve"
+cp ".build/universal/CodexReserve" "$APP/Contents/MacOS/CodexReserve"
 chmod +x "$APP/Contents/MacOS/CodexReserve"
 
 # App icon (Apple-esque squircle + double ring). Regenerate with ./icon/make-icon.sh

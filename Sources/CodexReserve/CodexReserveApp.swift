@@ -149,8 +149,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard closeTimer == nil else { return } // one pending close at a time
         closeTimer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             Task { @MainActor in
-                guard let self, self.popover.isShown else { return }
-                self.popover.performClose(nil)
+                guard let self else { return }
+                self.closeTimer = nil
+                if self.popover.isShown {
+                    self.popover.performClose(nil)
+                }
             }
         }
     }
@@ -185,6 +188,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func tooltip(for snap: UsageSnapshot) -> String {
         guard snap.effectiveRemaining != nil else { return "Codex limits" }
+        if snap.isWeeklyOnly, let week = snap.weeklyRemaining {
+            return "Codex · \(Int(week.rounded()))% weekly"
+        }
+        if snap.isFiveHourOnly, let five = snap.fiveHourRemaining {
+            return "Codex · \(Int(five.rounded()))% 5-hour"
+        }
         let five = snap.fiveHourRemaining.map { "\(Int($0.rounded()))% 5-hour" } ?? "5-hour –"
         let week = snap.weeklyRemaining.map { "\(Int($0.rounded()))% weekly" } ?? "weekly –"
         return "Codex · \(five) · \(week)"
@@ -234,8 +243,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // without hammering the backend.
         if !model.polling {
             Task {
-                let snap = await self.model.fetchOnce()
-                self.model.start(seeded: snap)
+                do {
+                    let snap = try await UsageService.fetchSnapshot()
+                    self.model.start(seeded: snap)
+                } catch {
+                    let msg = (error as NSError).localizedDescription
+                    self.model.start(seeded: nil, error: msg)
+                }
             }
         }
     }

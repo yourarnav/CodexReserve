@@ -15,24 +15,19 @@ final class UsageModel: ObservableObject {
 
     private var sounds = SoundNotifier()
 
-    /// Fetch once and hand the snapshot to the caller.
-    /// Used by the launcher so the icon paints with real numbers immediately.
-    func fetchOnce() async -> UsageSnapshot? {
-        do {
-            return try await UsageService.fetchSnapshot()
-        } catch {
-            log.error("Usage refresh failed: \((error as NSError).localizedDescription, privacy: .public)")
-            return nil
-        }
-    }
-
     /// Start the loop, seeding from an already-fetched snapshot (no double fetch).
-    func start(seeded snap: UsageSnapshot?) {
+    /// A failed seed records its error so the UI shows it immediately instead
+    /// of blank limits until the next refresh.
+    func start(seeded snap: UsageSnapshot?, error: String? = nil) {
         if let snap {
             snapshot = snap
             let five = snap.fiveHourRemaining.map { "\(Int($0.rounded()))%" } ?? "?"
             let week = snap.weeklyRemaining.map { "\(Int($0.rounded()))%" } ?? "?"
             log.info("Usage updated: 5h \(five, privacy: .public) weekly \(week, privacy: .public) plan \(snap.plan, privacy: .public)")
+        } else if let error {
+            var s = snapshot
+            s.error = error
+            snapshot = s
         }
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in

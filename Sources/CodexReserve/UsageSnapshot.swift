@@ -34,13 +34,32 @@ struct UsageSnapshot: Equatable {
             // has swapped primary/secondary roles before. Role is the fallback.
             let primary = rl["primary_window"] as? [String: Any]
             let secondary = rl["secondary_window"] as? [String: Any]
-            let fiveCandidates = [primary, secondary].compactMap { $0 }
-            let weeklyCandidates = [secondary, primary].compactMap { $0 }
-            if let w = fiveCandidates.first(where: { isHours($0, hours: 5) }) ?? primary {
+            let candidates = [primary, secondary].compactMap { $0 }
+
+            let fiveByDuration = candidates.first(where: { isHours($0, hours: 5) })
+            let weeklyByDuration = candidates.first(where: { isHours($0, hours: 24 * 7) })
+
+            // Role fallback: only assign primary/secondary if not already
+            // claimed by the other window's duration match. Otherwise a
+            // solo weekly window would also land in fiveHourRemaining,
+            // duplicating rings and chimes.
+            let fiveWindow: [String: Any]? = {
+                if let fiveByDuration { return fiveByDuration }
+                if let p = primary, weeklyByDuration == nil { return p }
+                return nil
+            }()
+
+            let weeklyWindow: [String: Any]? = {
+                if let weeklyByDuration { return weeklyByDuration }
+                if let s = secondary, fiveByDuration == nil { return s }
+                return nil
+            }()
+
+            if let w = fiveWindow {
                 snap.fiveHourRemaining = remaining(from: w)
                 snap.fiveHourResetAt = resetDate(from: w)
             }
-            if let w = weeklyCandidates.first(where: { isHours($0, hours: 24 * 7) }) ?? secondary {
+            if let w = weeklyWindow {
                 snap.weeklyRemaining = remaining(from: w)
                 snap.weeklyResetAt = resetDate(from: w)
             }
