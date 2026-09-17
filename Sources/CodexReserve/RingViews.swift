@@ -57,22 +57,33 @@ struct Ring: View {
 }
 
 /// Double ring: outer = weekly (royal blue), inner = 5-hour (Watch green).
+/// Solo mode when only one window exists (e.g. Pro has no 5-hour window):
+/// a single centered ring in that window's color.
 struct DoubleRingView: View {
     var weekly: Double?   // 0...100 remaining
     var fiveHour: Double?
     var size: CGFloat = 120
 
     var body: some View {
-        ZStack {
-            Ring(fraction: (weekly ?? 0) / 100,
-                 color: weekly == nil ? .gray : .codexBlue,
-                 lineWidth: size * 0.085)
-                .frame(width: size, height: size)
-            Ring(fraction: (fiveHour ?? 0) / 100,
-                 color: fiveHour == nil ? .gray : .green,
-                 lineWidth: size * 0.085)
-                .frame(width: size * 0.70, height: size * 0.70)
+        Group {
+            if fiveHour == nil, let weekly {
+                Ring(fraction: weekly / 100, color: .codexBlue, lineWidth: size * 0.085)
+            } else if weekly == nil, let fiveHour {
+                Ring(fraction: fiveHour / 100, color: .green, lineWidth: size * 0.085)
+            } else {
+                ZStack {
+                    Ring(fraction: (weekly ?? 0) / 100,
+                         color: weekly == nil ? .gray : .codexBlue,
+                         lineWidth: size * 0.085)
+                        .frame(width: size, height: size)
+                    Ring(fraction: (fiveHour ?? 0) / 100,
+                         color: fiveHour == nil ? .gray : .green,
+                         lineWidth: size * 0.085)
+                        .frame(width: size * 0.70, height: size * 0.70)
+                }
+            }
         }
+        .frame(width: size, height: size)
     }
 }
 
