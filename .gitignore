@@ -2,6 +2,11 @@
 .swiftpm/
 *.o
 *.dmg
+# Credentials and environment: never commit these.
+auth.json
+*.auth.json
+.env
+.env.*
 # Built app bundle (rebuild with ./build-app.sh) + macOS noise
 CodexReserve.app/
 .DS_Store

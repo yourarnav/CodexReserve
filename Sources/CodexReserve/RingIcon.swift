@@ -86,6 +86,7 @@ enum RingIcon {
 
         guard let fraction else { return }
         let f = min(1, max(0, fraction))
+        guard f > 0.001 else { return } // Match SwiftUI: 0% renders track only
         color.setStroke()
         let arc = NSBezierPath()
         if f >= 0.999 {
