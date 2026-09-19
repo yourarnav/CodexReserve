@@ -1,6 +1,6 @@
 # CodexReserve
 
-
+[![Downloads](https://img.shields.io/github/downloads/yourarnav/CodexReserve/CodexReserve.dmg?label=Downloads&logo=github)](https://github.com/yourarnav/CodexReserve/releases)
 <p align="center">
   <img src="docs/screenshot-popover-v2.png" alt="CodexReserve showing Codex usage limits" width="300" />
 </p>
