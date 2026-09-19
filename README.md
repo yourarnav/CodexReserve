@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://codex-reserve.vercel.app/"><strong>Live preview</strong></a>
+  <a href="https://codex-reserve.vercel.app/"><strong>Live preview</strong></a> &bull; <a href="https://medium.com/@geminiloves12/why-i-built-a-native-swift-menu-bar-tool-to-track-my-codex-limits-070944e20428"><strong>Read on Medium</strong></a>
 </p>
 
 <p align="center">
