@@ -7,6 +7,12 @@
       alt="CodexReserve Downloads"
     />
   </a>
+  <a href="https://youtube.com/shorts/Nm9aB_S0Pgw">
+    <img
+      src="https://img.shields.io/badge/YouTube-12s%20Demo-FF0000?logo=youtube&logoColor=white"
+      alt="Watch Demo on YouTube"
+    />
+  </a>
 </p>
 
 <p align="center">
@@ -15,6 +21,10 @@
     alt="CodexReserve showing Codex usage limits"
     width="300"
   />
+</p>
+
+<p align="center">
+  <a href="https://youtube.com/shorts/Nm9aB_S0Pgw"><strong>▶ Watch 12s Demo</strong></a>
 </p>
 
 
