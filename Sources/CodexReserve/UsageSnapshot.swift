@@ -10,6 +10,18 @@ struct UsageSnapshot: Equatable {
     var updatedAt: Date = Date()
     var error: String?
 
+    /// Equality ignores `updatedAt` so identical values don't trigger UI redraws.
+    static func == (lhs: UsageSnapshot, rhs: UsageSnapshot) -> Bool {
+        lhs.plan == rhs.plan
+            && lhs.fiveHourRemaining == rhs.fiveHourRemaining
+            && lhs.weeklyRemaining == rhs.weeklyRemaining
+            && lhs.fiveHourResetAt == rhs.fiveHourResetAt
+            && lhs.weeklyResetAt == rhs.weeklyResetAt
+            && lhs.error == rhs.error
+            && lhs.hasFiveHourWindow == rhs.hasFiveHourWindow
+            && lhs.hasWeeklyWindow == rhs.hasWeeklyWindow
+    }
+
     /// Structural presence of windows (independent of whether metrics parsed
     /// successfully). A window with a missing used_percent still counts as
     /// present, so it never triggers solo mode by accident.
@@ -89,6 +101,17 @@ struct UsageSnapshot: Equatable {
     private static func resetDate(from window: [String: Any]) -> Date? {
         if let ts = (window["reset_at"] as? NSNumber)?.doubleValue {
             return Date(timeIntervalSince1970: ts)
+        }
+        if let str = window["reset_at"] as? String {
+            let trimmed = str.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let ts = Double(trimmed) {
+                return Date(timeIntervalSince1970: ts)
+            }
+            let iso = ISO8601DateFormatter()
+            if let d = iso.date(from: trimmed) { return d }
+            let withFraction = ISO8601DateFormatter()
+            withFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            if let d = withFraction.date(from: trimmed) { return d }
         }
         return nil
     }

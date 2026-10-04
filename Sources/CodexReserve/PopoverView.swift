@@ -70,7 +70,7 @@ struct PopoverView: View {
             .font(.caption)
         }
         .padding(18)
-        .frame(width: 264)
+        .frame(width: 300)
         // No card wrapper: the NSPopover itself is one continuous glass panel.
     }
 

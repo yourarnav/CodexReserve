@@ -27,6 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var statusItem: NSStatusItem?
     private let popover = NSPopover()
+    private var popoverHost: NSHostingController<PopoverView>?
     private let model = UsageModel()
     private var cancellable: AnyCancellable?
     private var closeTimer: Timer?
@@ -36,26 +37,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// launch/quit system-wide, so without this two fetches could run
     /// concurrently and double-fire sounds.
     private var isStartingFetch = false
-    /// Set when Codex quits: stop all background work for the teardown.
+    /// Standby while Codex isn't running: stop background work and hide the
+    /// icon, but stay alive so we reappear when Codex launches.
     /// Read synchronously from the hot mouse-move path (stale reads harmless).
     nonisolated(unsafe) private var tearingDown = false
+    private var cachedIconRect = NSRect.zero
+    private var cachedIconRectAt = Date.distantPast
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // model.start() happens via updateVisibility() below (only if Codex runs).
 
-        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        statusItem = item
-        item.button?.image = RingIcon.make(snapshot: UsageSnapshot())
-        item.button?.imagePosition = .imageOnly // the image already contains both numbers
-        item.button?.title = ""
-        item.button?.appearsDisabled = false // never render faded
-        item.button?.target = self
-        item.button?.action = #selector(togglePopover(_:))
-        item.button?.toolTip = "Codex limits"
-
-        // Follow Codex: we only run while Codex runs — if it isn't running
-        // (launch or quit), tear ourselves down entirely so nothing lingers
-        // in the menu bar or Activity Monitor.
+        ensureStatusItem()
+        // Follow Codex: we only show while Codex runs — if it isn't running
+        // (launch or quit), stand by with no icon/timers until it returns.
         NSWorkspace.shared.notificationCenter.addObserver(
             self, selector: #selector(appPresenceChanged(_:)),
             name: NSWorkspace.didLaunchApplicationNotification, object: nil)
@@ -65,17 +59,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         updateVisibility()
 
         let host = NSHostingController(rootView: PopoverView(model: model))
+        popoverHost = host
         popover.contentViewController = host
         popover.behavior = .transient
-        let hostView = host.view
-        hostView.layoutSubtreeIfNeeded()
-        let fit = hostView.fittingSize
-        if fit.width > 10 && fit.height > 10 {
-            popover.contentSize = NSSize(width: min(340, max(280, fit.width)),
-                                        height: min(520, max(220, fit.height)))
-        } else {
-            popover.contentSize = NSSize(width: 300, height: 380)
-        }
+        updatePopoverSize()
 
         // Hover to open (no click needed). NOTE: local NSTrackingAreas do NOT
         // fire on status-item buttons — the menu bar is owned by Control
@@ -127,7 +114,46 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 button.image = RingIcon.make(snapshot: snap)
                 button.title = ""
                 button.toolTip = self.tooltip(for: snap)
+                self.updatePopoverSize()
             }
+    }
+
+    private func ensureStatusItem() {
+        if statusItem != nil { return }
+        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        statusItem = item
+        item.button?.image = RingIcon.make(snapshot: model.snapshot)
+        item.button?.imagePosition = .imageOnly // the image already contains both numbers
+        item.button?.title = ""
+        item.button?.appearsDisabled = false // never render faded
+        item.button?.target = self
+        item.button?.action = #selector(togglePopover(_:))
+        item.button?.toolTip = tooltip(for: model.snapshot)
+    }
+
+    private func updatePopoverSize() {
+        guard let hostView = popoverHost?.view else { return }
+        hostView.layoutSubtreeIfNeeded()
+        let fit = hostView.fittingSize
+        if fit.width > 10 && fit.height > 10 {
+            popover.contentSize = NSSize(width: min(340, max(300, fit.width)),
+                                        height: min(520, max(220, fit.height)))
+        } else {
+            popover.contentSize = NSSize(width: 300, height: 380)
+        }
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        if let mouseMonitor { NSEvent.removeMonitor(mouseMonitor) }
+        if let keyMonitor { NSEvent.removeMonitor(keyMonitor) }
+        mouseMonitor = nil
+        keyMonitor = nil
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+        cancellable?.cancel()
+        cancellable = nil
+        closeTimer?.invalidate()
+        closeTimer = nil
+        model.stop()
     }
 
     @objc private func togglePopover(_ sender: Any?) {
@@ -167,9 +193,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Screen rect of our menu bar icon (for hover hit-testing).
+    /// Cached 0.5s: the window lookup is IPC to Control Center, too
+    /// expensive to run on every mouse-move event uncached.
     private func iconScreenRect() -> NSRect {
-        guard let button = statusItem?.button, let win = button.window else { return .zero }
-        return win.convertToScreen(button.convert(button.bounds, to: nil))
+        if Date().timeIntervalSince(cachedIconRectAt) < 0.5 { return cachedIconRect }
+        guard let button = statusItem?.button, let win = button.window else {
+            cachedIconRect = .zero
+            cachedIconRectAt = Date()
+            return .zero
+        }
+        let rect = win.convertToScreen(button.convert(button.bounds, to: nil))
+        cachedIconRect = rect
+        cachedIconRectAt = Date()
+        return rect
     }
 
     private func handleGlobalMouseMove() {
@@ -202,7 +238,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return "Codex · \(five) · \(week)"
     }
 
-    // MARK: - Follow Codex (show while it runs, quit when it quits)
+    // MARK: - Follow Codex (show while it runs, stand by when it quits)
     // Matching rules live in TargetMatch.swift (unit-tested).
 
     private func targetRunning() -> Bool {
@@ -213,40 +249,47 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Set once Codex has been seen in this run. Distinguishes "launched
-    /// with no Codex" (explain, then quit) from "Codex quit on us" (go quietly).
+    /// with no Codex" (explain, then stand by) from "Codex quit on us" (go quietly).
     private var didRunWithCodex = false
 
     private func updateVisibility() {
         let running = targetRunning()
         if !running {
-            // We only run while Codex runs: tear ourselves down entirely.
+            // Stand by (don't terminate): hide the icon, stop polling, stay
+            // alive so we reappear automatically when Codex launches.
             tearingDown = true
+            cachedIconRect = .zero
             model.stop()
             if popover.isShown { popover.performClose(nil) }
+            if let item = statusItem {
+                NSStatusBar.system.removeStatusItem(item)
+                statusItem = nil
+            }
             if didRunWithCodex {
-                hoverLog.info("codex quit — quitting CodexReserve")
+                hoverLog.info("codex quit — standing by")
             } else {
                 // Launched with no Codex around: say so instead of
                 // vanishing silently (which looks broken on a stranger's Mac).
                 let alert = NSAlert()
                 alert.messageText = "Codex isn't running"
-                alert.informativeText = "Open Codex first, then open CodexReserve."
+                alert.informativeText = "Open Codex first — CodexReserve will appear in the menu bar."
                 alert.alertStyle = .informational
                 alert.addButton(withTitle: "OK")
                 NSApplication.shared.activate()
                 alert.runModal()
-                hoverLog.info("launched without Codex — explained and quitting")
+                hoverLog.info("launched without Codex — explained and standing by")
             }
-            NSApplication.shared.terminate(nil)
             return
         }
+        tearingDown = false
+        ensureStatusItem()
         didRunWithCodex = true
         // First sighting of Codex in this run: kick off polling if needed.
         // Codex windows move slowly; 60s keeps the ring "continuously" fresh
         // without hammering the backend.
         if !model.polling && !isStartingFetch {
             isStartingFetch = true
-            Task {
+            Task { @MainActor in
                 defer { self.isStartingFetch = false }
                 do {
                     let snap = try await UsageService.fetchSnapshot()

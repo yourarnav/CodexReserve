@@ -71,11 +71,11 @@ struct DoubleRingView: View {
                 Ring(fraction: five / 100, color: .green, lineWidth: size * 0.085)
             } else {
                 ZStack {
-                    Ring(fraction: (snapshot.weeklyRemaining ?? 0) / 100,
+                    Ring(fraction: snapshot.weeklyRemaining.map { $0 / 100 },
                          color: snapshot.weeklyRemaining == nil ? .gray : .codexBlue,
                          lineWidth: size * 0.085)
                         .frame(width: size, height: size)
-                    Ring(fraction: (snapshot.fiveHourRemaining ?? 0) / 100,
+                    Ring(fraction: snapshot.fiveHourRemaining.map { $0 / 100 },
                          color: snapshot.fiveHourRemaining == nil ? .gray : .green,
                          lineWidth: size * 0.085)
                         .frame(width: size * 0.70, height: size * 0.70)

@@ -1,4 +1,7 @@
 import AppKit
+import os
+
+private let chimeLog = Logger(subsystem: "com.codexreserve.app", category: "chime")
 
 /// Gentle chimes when a limit drains through 50% and 20% remaining.
 ///
@@ -50,7 +53,9 @@ struct SoundNotifier {
 
     @discardableResult
     private static func chime(named name: String) -> String {
-        NSSound(named: name)?.play()
+        if NSSound(named: name)?.play() != true {
+            chimeLog.error("Missing system sound: \(name, privacy: .public)")
+        }
         return name
     }
 }

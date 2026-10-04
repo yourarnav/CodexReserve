@@ -49,7 +49,7 @@ final class UsageModel: ObservableObject {
     func refresh() {
         guard !isLoading else { return }
         isLoading = true
-        Task {
+        Task { @MainActor in
             do {
                 let snap = try await UsageService.fetchSnapshot()
                 let played = self.sounds.check(old: self.snapshot, new: snap)

@@ -9,9 +9,10 @@ enum TargetMatch {
     static let executable = "ChatGPT"
 
     /// Pure matching logic: main app only, never helpers.
+    /// Nil executable fails closed: helpers with no URL must not match.
     static func isTarget(bundleID: String?, executableName: String?) -> Bool {
         guard let bundleID, bundleIDs.contains(bundleID) else { return false }
-        guard let executableName else { return true } // fail open (old behavior)
+        guard let executableName else { return false }
         return executableName == executable
     }
 }
