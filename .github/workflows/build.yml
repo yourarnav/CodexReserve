@@ -1,0 +1,61 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26
+        run: |
+          ls /Applications/ | grep -i xcode || true
+          LATEST_26="$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)"
+          if [ -n "$LATEST_26" ]; then
+            sudo xcode-select -s "$LATEST_26/Contents/Developer"
+          fi
+          xcodebuild -version
+          swift --version
+          xcrun --show-sdk-path
+
+      - name: Build app
+        run: ./build-app.sh
+
+      - name: Make DMG
+        run: |
+          rm -f CodexReserve.dmg
+          hdiutil create -volname CodexReserve -srcfolder CodexReserve.app -ov -format UDZO CodexReserve.dmg
+          ls -lh CodexReserve.dmg
+          shasum -a 256 CodexReserve.dmg | tee dmg-sha256.txt
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CodexReserve-dmg
+          path: |
+            CodexReserve.dmg
+            dmg-sha256.txt
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: CodexReserve-dmg
+      - name: Attach DMG to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            CodexReserve.dmg
